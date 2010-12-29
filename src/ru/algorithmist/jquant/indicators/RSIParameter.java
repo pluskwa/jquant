@@ -16,50 +16,39 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with JQuant. If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.algorithmist.jquant.storage;
+package ru.algorithmist.jquant.indicators;
 
-import java.util.Arrays;
+import ru.algorithmist.jquant.engine.IParameter;
+import ru.algorithmist.jquant.storage.Key;
+
+import java.util.Date;
 
 /**
  * @author "Sergey Edunov"
  * @version 12/29/10
  */
-public class Key {
+public class RSIParameter extends CalculatedParameter  {
 
-    private String[] data;
-
-    public static Key from(String... args){
-        return new Key(args);
-    }
-
-    public Key(String[] data) {
-        this.data = data;
-    }
-
-    public String[] getData() {
-        return data;
-    }
-
-    public String toString(){
-        StringBuilder res = new StringBuilder();
-        for(int i=0; i<data.length; i++){
-            if (i!=0) res.append('\'');
-            res.append(data[i]);
-        }
-        return res.toString();
+    public RSIParameter(int days) {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        return Arrays.equals(data, ((Key) o).data);
-
+    public IParameter[] declareDependencies() {
+        return new IParameter[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public int hashCode() {
-        return data != null ? Arrays.hashCode(data) : 0;
+    public double calculate(Date date) {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Key getQueryKey() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean saveable() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

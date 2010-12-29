@@ -16,18 +16,29 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with JQuant. If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.algorithmist.jquant.connectors;
+package ru.algorithmist.jquant.infr;
 
-import java.util.Date;
+import ru.algorithmist.jquant.infr.impl.StandaloneHTTPClient;
 
 /**
  * @author "Sergey Edunov"
  * @version 12/29/10
  */
-public interface IConnector {
+public class HTTPClientFactory {
 
-    public void load(String name, String symbol, Date date);
+    private IHTTPClient instance = new StandaloneHTTPClient();
 
-    public boolean canLoad(String name, String symbol, Date date);
+    private static HTTPClientFactory factory = new HTTPClientFactory();
 
+    public static HTTPClientFactory getInstance(){
+        return factory;
+    }
+
+    public IHTTPClient client(){
+        return instance;
+    }
+
+    public void register(IHTTPClient client){
+        instance = client;
+    }
 }

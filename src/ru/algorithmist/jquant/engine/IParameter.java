@@ -16,18 +16,27 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with JQuant. If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.algorithmist.jquant.connectors;
+package ru.algorithmist.jquant.engine;
 
-import java.util.Date;
+import ru.algorithmist.jquant.storage.Key;
 
 /**
  * @author "Sergey Edunov"
  * @version 12/29/10
  */
-public interface IConnector {
+public interface IParameter {
 
-    public void load(String name, String symbol, Date date);
+    public Key getQueryKey();
 
-    public boolean canLoad(String name, String symbol, Date date);
+    public boolean isUpdatable();
+
+    public IUpdater getUpdater();
+
+    /**
+     * Do we need to store resulting value in database.
+     *
+     * @return <code>true</code> If return value should be stored in database.
+     */
+    public boolean saveable();
 
 }

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with JQuant. If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.algorithmist.jquant.connectors;
+package ru.algorithmist.jquant.engine;
 
 import java.util.Date;
 
@@ -24,10 +24,8 @@ import java.util.Date;
  * @author "Sergey Edunov"
  * @version 12/29/10
  */
-public interface IConnector {
+public interface IUpdater {
 
-    public void load(String name, String symbol, Date date);
-
-    public boolean canLoad(String name, String symbol, Date date);
+    public double update(Date date);
 
 }

@@ -16,18 +16,18 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with JQuant. If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.algorithmist.jquant.connectors;
+package ru.algorithmist.jquant.infr;
 
-import java.util.Date;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author "Sergey Edunov"
  * @version 12/29/10
  */
-public interface IConnector {
+public interface IHTTPClient {
 
-    public void load(String name, String symbol, Date date);
+    public String getContent(String url) throws IOException;
 
-    public boolean canLoad(String name, String symbol, Date date);
-
+    public InputStream getContentStream(String url) throws IOException;
 }

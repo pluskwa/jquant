@@ -24,10 +24,20 @@ import java.util.Date;
  * @author "Sergey Edunov"
  * @version 12/29/10
  */
-public interface IConnector {
+public interface QuoteCallback {
 
-    public void load(String name, String symbol, Date date);
+    public void setOpen(double value);
 
-    public boolean canLoad(String name, String symbol, Date date);
+    public void setClose(double value);
+
+    public void setHigh(double value);
+
+    public void setLow(double value);
+
+    public void setVolume(long value);
+
+    public void setDate(Date date);
+
+    public void commit();
 
 }

@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with JQuant. If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.algorithmist.jquant.connectors;
+package ru.algorithmist.jquant.indicators;
+
+import ru.algorithmist.jquant.engine.IParameter;
 
 import java.util.Date;
 
@@ -24,10 +26,10 @@ import java.util.Date;
  * @author "Sergey Edunov"
  * @version 12/29/10
  */
-public interface IConnector {
+public interface ICalculator {
 
-    public void load(String name, String symbol, Date date);
+    public IParameter[] declareDependencies();
 
-    public boolean canLoad(String name, String symbol, Date date);
+    public double calculate(Date date);
 
 }

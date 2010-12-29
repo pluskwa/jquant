@@ -18,16 +18,34 @@
  */
 package ru.algorithmist.jquant.connectors;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author "Sergey Edunov"
  * @version 12/29/10
  */
-public interface IConnector {
+public class ConnectorProcess {
 
-    public void load(String name, String symbol, Date date);
+    private static ConnectorProcess instance = new ConnectorProcess();
+    private List<IConnector> connectors = new ArrayList<IConnector>();
 
-    public boolean canLoad(String name, String symbol, Date date);
+    public static ConnectorProcess getInstance(){
+        return instance;
+    }
 
+    private ConnectorProcess(){}
+
+    public void update(String name, String symbol, Date date){
+        for(IConnector connector : connectors){
+            if (connector.canLoad(name, symbol, date)){
+                connector.load(name, symbol, date);
+            }
+        }
+    }
+
+    public void register(IConnector connector){
+        connectors.add(connector);
+    }
 }

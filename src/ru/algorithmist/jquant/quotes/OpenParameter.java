@@ -16,18 +16,24 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with JQuant. If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.algorithmist.jquant.connectors;
+package ru.algorithmist.jquant.quotes;
 
-import java.util.Date;
+import ru.algorithmist.jquant.engine.StockQuoteParameter;
+import ru.algorithmist.jquant.storage.Key;
 
 /**
  * @author "Sergey Edunov"
  * @version 12/29/10
  */
-public interface IConnector {
+public class OpenParameter extends StockQuoteParameter {
 
-    public void load(String name, String symbol, Date date);
+    public OpenParameter(String symbol) {
+        super("Open", symbol);
+    }
 
-    public boolean canLoad(String name, String symbol, Date date);
+    @Override
+    public Key getQueryKey() {
+        return Key.from(name, symbol, "day");
+    }
 
 }
