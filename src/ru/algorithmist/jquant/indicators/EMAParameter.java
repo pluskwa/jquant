@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 20010, Sergey Edunov. All Rights Reserved.
+ * Copyright (c) 2010, Sergey Edunov. All Rights Reserved.
  *
  * This file is part of JQuant library.
  *
@@ -53,7 +53,6 @@ public class EMAParameter extends CalculatedParameter {
         if (deep > span * 2){
             return 0;
         }
-        System.out.println(">> " + deep + " " + date);
         double value = DataService.instance().value(date, base);
         if (Double.isNaN(value)) {
             return Double.NaN;
@@ -72,7 +71,6 @@ public class EMAParameter extends CalculatedParameter {
             return Double.NaN;
         }
         double alpha = 2. / (1 + span);
-        System.out.println("<< " + deep + " " + date + " " + (alpha * value + (1 - alpha) * prevValue));
         return alpha * value + (1 - alpha) * prevValue;
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 20010, Sergey Edunov. All Rights Reserved.
+ * Copyright (c) 2010, Sergey Edunov. All Rights Reserved.
  *
  * This file is part of JQuant library.
  *
