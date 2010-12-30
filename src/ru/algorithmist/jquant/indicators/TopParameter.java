@@ -22,6 +22,7 @@ import ru.algorithmist.jquant.engine.DataService;
 import ru.algorithmist.jquant.engine.IParameter;
 import ru.algorithmist.jquant.engine.IUpdater;
 import ru.algorithmist.jquant.engine.TimeInterval;
+import ru.algorithmist.jquant.engine.Value;
 import ru.algorithmist.jquant.indicators.CalculatedParameter;
 import ru.algorithmist.jquant.quotes.CloseParameter;
 import ru.algorithmist.jquant.quotes.OpenParameter;
@@ -45,6 +46,7 @@ public class TopParameter extends CalculatedParameter {
         this.symbol = symbol;
         open = new OpenParameter(symbol, interval);
         close = new CloseParameter(symbol, interval);
+        this.interval = interval;
     }
 
     @Override
@@ -53,12 +55,25 @@ public class TopParameter extends CalculatedParameter {
     }
 
     @Override
+    public TimeInterval getTimeInterval() {
+        return interval;
+    }
+
+    @Override
     public IParameter[] declareDependencies() {
         return new IParameter[] {open, close};
     }
 
     @Override
-    public double calculate(Date date) {
-        return Math.max(DataService.instance().value(date, open), DataService.instance().value(date, close));
+    public Value calculate(Date date) {
+        Value vo = DataService.instance().value(date, open);
+        Value vc = DataService.instance().value(date, close);
+        if (vo.isOK() && vc.isOK()){
+            return new Value(Math.max(vo.getValue(), vc.getValue()));
+        }
+        if (vo.isNA() || vc.isNA()){
+            return Value.NA;
+        }
+        return Value.TNA;
     }
 }

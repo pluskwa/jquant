@@ -18,6 +18,7 @@
  */
 package ru.algorithmist.jquant.engine;
 
+import ru.algorithmist.jquant.infr.DateUtils;
 import ru.algorithmist.jquant.storage.IDataStorage;
 import ru.algorithmist.jquant.storage.Key;
 import ru.algorithmist.jquant.storage.StorageFactory;
@@ -37,18 +38,24 @@ public class DataService {
         return instance;
     }
 
-    public double value(Date date, IParameter parameter){
-        double value = storage.query(parameter.getQueryKey(), date);
-        if (Double.isNaN(value) && parameter.isUpdatable()){
-            value = parameter.getUpdater().update(date);
-            if (Double.isNaN(value)) {
-                value = storage.query(parameter.getQueryKey(), date);
-            }
+    public Value value(Date date, IParameter parameter){
+        return  value(date, parameter, 0);
+    }
+
+    public Value value(Date date, IParameter parameter, int shift){
+        date = DateUtils.shift(date, parameter.getTimeInterval(), shift);
+        Value value = storage.query(parameter.getQueryKey(), date);
+        if (value.isNA() || value.isOK()){
+            return value;
+        }
+        value = parameter.getUpdater().update(date);
+        if (value.isTNA()) {
+            value = storage.query(parameter.getQueryKey(), date);
         }
         return value;
     }
 
-    public void update(Date date, IParameter parameter, double value){
+    public void update(Date date, IParameter parameter, Value value){
         storage.store(parameter.getQueryKey(), date, value);
     }
 }

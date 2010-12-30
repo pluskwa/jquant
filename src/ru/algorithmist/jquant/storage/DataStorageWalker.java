@@ -16,33 +16,18 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with JQuant. If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.algorithmist.jquant.engine;
+package ru.algorithmist.jquant.storage;
 
-import ru.algorithmist.jquant.storage.Key;
+import ru.algorithmist.jquant.engine.Value;
+
+import java.util.Date;
 
 /**
  * @author "Sergey Edunov"
- * @version 12/29/10
+ * @version 12/30/10
  */
-public interface IParameter {
+public interface DataStorageWalker {
 
-    public Key getQueryKey();
-
-    public boolean isUpdatable();
-
-    public IUpdater getUpdater();
-
-    /**
-     * Do we need to store resulting value in database.
-     *
-     * @return <code>true</code> If return value should be stored in database.
-     */
-    public boolean saveable();
-
-    /**
-     * Returns the time interval covered by this parameter.
-     * @return time interval covered by parameter.
-     */
-    public TimeInterval getTimeInterval();
+    public void accept(Key key, Date date, Value value);
 
 }

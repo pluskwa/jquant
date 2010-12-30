@@ -18,7 +18,11 @@
  */
 package ru.algorithmist.jquant.infr;
 
+import ru.algorithmist.jquant.engine.TimeInterval;
+
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * User: Sergey Edunov
@@ -32,6 +36,11 @@ public class DateUtils {
 
     public static boolean isDateAfterDay(Date a, Date b){
         return b.getYear() >= a.getYear() && b.getMonth() >= a.getMonth() && b.getDate() >= a.getDate();
+    }
+
+    public static Date shift(Date from, TimeInterval interval, int shift){
+        long ms = from.getTime() + shift*interval.getTimeSpan();
+        return new Date(ms);
     }
 
     public static Date monthBefore(Date today){
@@ -60,18 +69,8 @@ public class DateUtils {
     }
 
     public static Date yesterday(Date today){
-        Date from = (Date) today.clone();
-        if (from.getDate() > 1){
-            from.setDate(today.getDate()-1);
-        }else if (from.getMonth() > 0){
-            from.setMonth(today.getMonth() - 1);
-            from.setDate(1);
-        }else {
-            from.setYear(today.getYear() - 1);
-            from.setMonth(11);
-            from.setDate(1);
-        }
-        return from;
+        long time = today.getTime() - 24*60*60*1000;
+        return new Date(time);
     }
 
 

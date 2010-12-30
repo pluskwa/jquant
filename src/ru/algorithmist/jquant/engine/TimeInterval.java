@@ -31,7 +31,7 @@ public enum TimeInterval {
 //    MIN15("15min"),
 //    MIN30("30min"),
 //    HOUR("hour"),
-    DAY("day", 86400000);
+    DAY("day", 24*60*60*1000);
 //    WEEK("week"),
 //    MONTH("month");
 

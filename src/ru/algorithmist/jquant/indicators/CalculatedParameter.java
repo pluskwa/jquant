@@ -21,9 +21,9 @@ package ru.algorithmist.jquant.indicators;
 import ru.algorithmist.jquant.engine.DataService;
 import ru.algorithmist.jquant.engine.IParameter;
 import ru.algorithmist.jquant.engine.IUpdater;
+import ru.algorithmist.jquant.engine.Value;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -58,6 +58,8 @@ public abstract class CalculatedParameter implements IParameter, ICalculator {
         return false;
     }
 
+
+
     @Override
     public int hashCode() {
         return declareDependencies() != null ? Arrays.hashCode(declareDependencies()) : 0;
@@ -81,8 +83,8 @@ public abstract class CalculatedParameter implements IParameter, ICalculator {
         }
 
         @Override
-        public double update(Date date) {
-            double value = parameter.calculate(date);
+        public Value update(Date date) {
+            Value value = parameter.calculate(date);
             if (parameter.saveable()) {
                 DataService.instance().update(date, parameter, value);
             }

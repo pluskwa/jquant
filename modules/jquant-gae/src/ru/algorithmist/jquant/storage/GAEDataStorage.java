@@ -18,6 +18,8 @@
  */
 package ru.algorithmist.jquant.storage;
 
+import ru.algorithmist.jquant.engine.Value;
+
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -43,7 +45,7 @@ public class GAEDataStorage implements IDataStorage {
     }
 
     @Override
-    public void store(Key key, Date date, double value) {
+    public void store(Key key, Date date, Value value) {
         PersistenceManager pm = null;
         try {
             pm = pmf.getPersistenceManager();
@@ -64,13 +66,13 @@ public class GAEDataStorage implements IDataStorage {
     }
 
     @Override
-    public double query(Key key, Date date) {
+    public Value query(Key key, Date date) {
         PersistenceManager pm = null;
         try {
             pm = pmf.getPersistenceManager();
             List<GData> res = (List<GData>) lookup(pm).execute(key.toString(), date);
             if (res == null || res.isEmpty()) {
-                return Double.NaN;
+                return Value.TNA;
             }
             if (res.size() > 1) {
                 logger.log(Level.WARNING, "Query returned more than one instance " + key + ' ' + date);
@@ -82,6 +84,23 @@ public class GAEDataStorage implements IDataStorage {
             }
         }
 
+    }
+
+    @Override
+    public void iterate(DataStorageWalker walker) {
+        PersistenceManager pm = null;
+        try {
+            pm = pmf.getPersistenceManager();
+            pm.newQuery(GData.class);
+            List<GData> res = (List<GData>) pm.newQuery(GData.class).execute();
+            for(GData data : res){
+                walker.accept(Key.parseString(data.getKey()), data.getDate(), data.getValue());
+            }
+        } finally {
+            if (pm != null) {
+                pm.close();
+            }
+        }
     }
 
     private Query lookup(PersistenceManager manager) {

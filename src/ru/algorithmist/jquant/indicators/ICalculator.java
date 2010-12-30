@@ -19,6 +19,7 @@
 package ru.algorithmist.jquant.indicators;
 
 import ru.algorithmist.jquant.engine.IParameter;
+import ru.algorithmist.jquant.engine.Value;
 
 import java.util.Date;
 
@@ -30,6 +31,6 @@ public interface ICalculator {
 
     public IParameter[] declareDependencies();
 
-    public double calculate(Date date);
+    public Value calculate(Date date);
 
 }

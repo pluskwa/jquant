@@ -18,6 +18,8 @@
  */
 package ru.algorithmist.jquant.storage;
 
+import ru.algorithmist.jquant.engine.Value;
+
 import java.util.Date;
 
 /**
@@ -26,8 +28,10 @@ import java.util.Date;
  */
 public interface IDataStorage {
 
-    public void store(Key key, Date date, double value);
+    public void store(Key key, Date date, Value value);
 
-    public double query(Key key, Date date);
+    public Value query(Key key, Date date);
+
+    public void iterate(DataStorageWalker walker);
 
 }

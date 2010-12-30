@@ -19,6 +19,8 @@
 package ru.algorithmist.jquant.indicators;
 
 import ru.algorithmist.jquant.engine.IParameter;
+import ru.algorithmist.jquant.engine.TimeInterval;
+import ru.algorithmist.jquant.engine.Value;
 import ru.algorithmist.jquant.storage.Key;
 
 import java.util.Date;
@@ -38,8 +40,8 @@ public class RSIParameter extends CalculatedParameter  {
     }
 
     @Override
-    public double calculate(Date date) {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    public Value calculate(Date date) {
+        return Value.TNA;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -50,5 +52,10 @@ public class RSIParameter extends CalculatedParameter  {
     @Override
     public boolean saveable() {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public TimeInterval getTimeInterval() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

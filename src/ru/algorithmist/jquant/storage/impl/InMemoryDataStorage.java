@@ -18,6 +18,8 @@
  */
 package ru.algorithmist.jquant.storage.impl;
 
+import ru.algorithmist.jquant.engine.Value;
+import ru.algorithmist.jquant.storage.DataStorageWalker;
 import ru.algorithmist.jquant.storage.IDataStorage;
 import ru.algorithmist.jquant.storage.Key;
 
@@ -31,27 +33,38 @@ import java.util.Map;
  */
 public class InMemoryDataStorage implements IDataStorage {
 
-    private Map<Key, Map<Date, Double>> storage = new HashMap<Key, Map<Date, Double>>();
+    private Map<Key, Map<Date, Value>> storage = new HashMap<Key, Map<Date, Value>>();
 
     @Override
-    public void store(Key key, Date date, double value) {
-        Map<Date, Double> map = storage.get(key);
+    public void store(Key key, Date date, Value value) {
+        Map<Date, Value> map = storage.get(key);
         if (map == null){
-            map = new HashMap<Date, Double>();
+            map = new HashMap<Date, Value>();
             storage.put(key, map);
         }
         map.put(date, value);
     }
 
     @Override
-    public double query(Key key, Date date) {
-        Map<Date, Double> map = storage.get(key);
+    public Value query(Key key, Date date) {
+        Map<Date, Value> map = storage.get(key);
         if (map != null){
-            Double value = map.get(date);
+            Value value = map.get(date);
             if (value != null){
-                return value.doubleValue();
+                return value;
             }
         }
-        return Double.NaN;
+        return Value.TNA;
+    }
+
+    @Override
+    public void iterate(DataStorageWalker walker) {
+        for(Map.Entry<Key, Map<Date, Value>> entry : storage.entrySet()){
+            Key key = entry.getKey();
+            Map<Date, Value> map = entry.getValue();
+            for(Map.Entry<Date, Value> dd : map.entrySet()){
+                walker.accept(key, dd.getKey(), dd.getValue());
+            }
+        }
     }
 }

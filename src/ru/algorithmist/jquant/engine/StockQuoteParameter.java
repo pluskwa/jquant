@@ -79,6 +79,11 @@ public abstract class StockQuoteParameter implements IParameter {
         return Key.from(name, symbol, interval.getKey());
     }
 
+    @Override
+    public TimeInterval getTimeInterval() {
+        return interval;
+    }
+
     private static class SimpleUpdater implements IUpdater{
 
         private String symbol;
@@ -90,9 +95,9 @@ public abstract class StockQuoteParameter implements IParameter {
         }
 
         @Override
-        public double update(Date date) {
+        public Value update(Date date) {
             ConnectorProcess.getInstance().update(name, symbol, date);
-            return Double.NaN;
+            return Value.TNA;
         }
     }
 }

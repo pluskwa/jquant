@@ -21,6 +21,7 @@ package ru.algorithmist.jquant.connectors;
 import ru.algorithmist.jquant.engine.DataService;
 import ru.algorithmist.jquant.engine.IParameter;
 import ru.algorithmist.jquant.engine.TimeInterval;
+import ru.algorithmist.jquant.engine.Value;
 import ru.algorithmist.jquant.quotes.CloseParameter;
 import ru.algorithmist.jquant.quotes.HighParameter;
 import ru.algorithmist.jquant.quotes.LowParameter;
@@ -71,7 +72,7 @@ public class StoreQuoteCallback implements QuoteCallback {
     }
 
     @Override
-    public void setVolume(long value) {
+    public void setVolume(double value) {
         volume = value;
     }
 
@@ -95,6 +96,10 @@ public class StoreQuoteCallback implements QuoteCallback {
     }
 
     public void store(IParameter parameter, double  value){
-        dataService.update(date, parameter, value);
+        if (Double.isNaN(value)){
+            dataService.update(date, parameter, Value.NA);
+        }else{
+            dataService.update(date, parameter, new Value(value));
+        }
     }
 }

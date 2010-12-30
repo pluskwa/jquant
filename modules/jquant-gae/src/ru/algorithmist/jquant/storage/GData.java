@@ -18,6 +18,8 @@
  */
 package ru.algorithmist.jquant.storage;
 
+import ru.algorithmist.jquant.engine.Value;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -44,9 +46,13 @@ public class GData {
     @Persistent
     private double value;
 
-    public GData(Key key, Date date, double value) {
+    @Persistent
+    private String status;
+
+    public GData(Key key, Date date, Value value) {
         this.date = date;
-        this.value = value;
+        this.value = value.getValue();
+        status = value.getStatus().toString();
         this.key = key.toString();
     }
 
@@ -66,11 +72,17 @@ public class GData {
         this.date = date;
     }
 
-    public double getValue() {
-        return value;
+    public Value getValue() {
+        if ("OK".equals(status)){
+            return new Value(value);
+        }else if ("TNA".equals(status)){
+            return Value.TNA;
+        }
+        return Value.NA;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setValue(Value value) {
+        this.value = value.getValue();
+        status = value.getStatus().toString();
     }
 }

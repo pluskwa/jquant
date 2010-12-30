@@ -36,7 +36,7 @@ public interface QuoteCallback {
 
     public void setLow(double value);
 
-    public void setVolume(long value);
+    public void setVolume(double value);
 
     public void setDate(Date date);
 

@@ -19,6 +19,7 @@
 package ru.algorithmist.jquant.storage;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 /**
  * @author "Sergey Edunov"
@@ -26,6 +27,7 @@ import java.util.Arrays;
  */
 public class Key {
 
+    private static final Pattern QUOTE = Pattern.compile("\'");
     private String[] data;
 
     public static Key from(String... args){
@@ -55,6 +57,11 @@ public class Key {
             res.append(data[i]);
         }
         return res.toString();
+    }
+
+    public static Key parseString(String value){
+        String[] data = QUOTE.split(value);
+        return from(data);
     }
 
     @Override

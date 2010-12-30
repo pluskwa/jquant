@@ -26,6 +26,6 @@ import java.util.Date;
  */
 public interface IUpdater {
 
-    public double update(Date date);
+    public Value update(Date date);
 
 }

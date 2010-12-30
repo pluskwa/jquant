@@ -21,6 +21,7 @@ package ru.algorithmist.jquant.connectors;
 
 
 import ru.algorithmist.jquant.engine.TimeInterval;
+import ru.algorithmist.jquant.infr.DateUtils;
 import ru.algorithmist.jquant.infr.HTTPClientFactory;
 import ru.algorithmist.jquant.infr.IHTTPClient;
 
@@ -59,9 +60,10 @@ public class FinamDataExporter {
 
 
     private static void parse(String[] lines, QuoteCallback callback) throws ParseException {
+        Date prev = null;
         for(int i=1; i<lines.length; i++){
             String line = lines[i];
-            parse(line, callback);
+            prev = parse(prev, line, callback);
         }
     }
 
@@ -72,21 +74,42 @@ public class FinamDataExporter {
 
 
 
-    public static void parse(String in, QuoteCallback callback) throws ParseException {
+    private static Date parse(Date prev, String in, QuoteCallback callback) throws ParseException {
         try{
             String[] items = in.split(",");
-            callback.setDate(DF.parse(items[2] + items[3]));
+            Date date = DF.parse(items[2] + items[3]);
+            if (prev!=null) {
+                fillTheGap(prev, date, callback);
+            }
+            callback.setDate(date);
             callback.setOpen(Double.parseDouble(items[4]));
             callback.setHigh(Double.parseDouble(items[5]));
             callback.setLow(Double.parseDouble(items[6]));
             callback.setClose(Double.parseDouble(items[7]));
             if (items.length>8) {
                 callback.setVolume(Long.parseLong(items[8].trim()));
+            } else{
+                callback.setVolume(Double.NaN);
             }
             callback.setTimeInterval(TimeInterval.DAY);
             callback.commit();
+            return date;
         }catch(Exception e){
             throw new RuntimeException(e);
+        }
+    }
+
+    private static void fillTheGap(Date prev, Date date, QuoteCallback callback) {
+        Date yesterday = DateUtils.yesterday(date);
+        while (!DateUtils.isTheSameSay(prev, yesterday)){
+            callback.setDate(yesterday);
+            callback.setClose(Double.NaN);
+            callback.setOpen(Double.NaN);
+            callback.setHigh(Double.NaN);
+            callback.setLow(Double.NaN);
+            callback.setVolume(Double.NaN);
+            callback.commit();
+            yesterday = DateUtils.yesterday(yesterday);
         }
     }
 }

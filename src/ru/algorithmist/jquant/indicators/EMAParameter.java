@@ -20,12 +20,19 @@ package ru.algorithmist.jquant.indicators;
 
 import ru.algorithmist.jquant.engine.DataService;
 import ru.algorithmist.jquant.engine.IParameter;
+import ru.algorithmist.jquant.engine.TimeInterval;
+import ru.algorithmist.jquant.engine.Value;
+import ru.algorithmist.jquant.engine.ValueStatus;
 import ru.algorithmist.jquant.infr.DateUtils;
 import ru.algorithmist.jquant.storage.Key;
 
 import java.util.Date;
 
 /**
+ * <b>Exponential moving average</b> calculated parameter.
+ * Calculates EMA for specified parameter with specified time span.
+ * Usually in finance people are interested in EMA(Close, 11)
+ *
  * @author "Sergey Edunov"
  * @version 12/29/10
  */
@@ -49,29 +56,28 @@ public class EMAParameter extends CalculatedParameter {
     }
 
     @Override
-    public double calculate(Date date) {
+    public Value calculate(Date date) {
         if (deep > span * 2){
-            return 0;
+            return new Value(0);
         }
-        double value = DataService.instance().value(date, base);
-        if (Double.isNaN(value)) {
-            return Double.NaN;
+        Value value = DataService.instance().value(date, base, 0);
+        if (value.isOK()) {
+
+            Value prevValue;
+            deep++;
+            int prevShift = -1;
+            do {
+                prevValue = DataService.instance().value(date, this, prevShift);
+                prevShift--;
+            } while (prevValue.isNA() && prevShift > -30);
+            deep--;
+            if (prevValue.isOK()) {
+                double alpha = 2. / (1 + span);
+                return new Value(alpha * value.getValue() + (1 - alpha) * prevValue.getValue());
+            }
+            return  prevValue;
         }
-        Date yesterday = date;
-        double prevValue;
-        int stopCounter = 30;
-        deep++;
-        do {
-            yesterday = DateUtils.yesterday(yesterday);
-            prevValue = DataService.instance().value(yesterday, this);
-            stopCounter--;
-        } while (Double.isNaN(prevValue) && stopCounter > 0);
-        deep--;
-        if (Double.isNaN(prevValue)) {
-            return Double.NaN;
-        }
-        double alpha = 2. / (1 + span);
-        return alpha * value + (1 - alpha) * prevValue;
+        return value;
     }
 
     @Override
@@ -83,5 +89,10 @@ public class EMAParameter extends CalculatedParameter {
     @Override
     public boolean saveable() {
         return deep==0;
+    }
+
+    @Override
+    public TimeInterval getTimeInterval() {
+        return base.getTimeInterval();
     }
 }
