@@ -19,6 +19,7 @@
 package ru.algorithmist.jquant.quotes;
 
 import ru.algorithmist.jquant.engine.StockQuoteParameter;
+import ru.algorithmist.jquant.engine.TimeInterval;
 import ru.algorithmist.jquant.storage.Key;
 
 /**
@@ -27,13 +28,8 @@ import ru.algorithmist.jquant.storage.Key;
  */
 public class OpenParameter extends StockQuoteParameter {
 
-    public OpenParameter(String symbol) {
-        super("Open", symbol);
-    }
-
-    @Override
-    public Key getQueryKey() {
-        return Key.from(name, symbol, "day");
+    public OpenParameter(String symbol, TimeInterval interval) {
+        super("Open", symbol, interval);
     }
 
 }

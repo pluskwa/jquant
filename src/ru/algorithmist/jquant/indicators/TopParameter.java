@@ -21,6 +21,7 @@ package ru.algorithmist.jquant.indicators;
 import ru.algorithmist.jquant.engine.DataService;
 import ru.algorithmist.jquant.engine.IParameter;
 import ru.algorithmist.jquant.engine.IUpdater;
+import ru.algorithmist.jquant.engine.TimeInterval;
 import ru.algorithmist.jquant.indicators.CalculatedParameter;
 import ru.algorithmist.jquant.quotes.CloseParameter;
 import ru.algorithmist.jquant.quotes.OpenParameter;
@@ -37,17 +38,18 @@ public class TopParameter extends CalculatedParameter {
     private String symbol;
     private IParameter open;
     private IParameter close;
+    private TimeInterval interval;
 
 
-    public TopParameter(String symbol) {
+    public TopParameter(String symbol, TimeInterval interval) {
         this.symbol = symbol;
-        open = new OpenParameter(symbol);
-        close = new CloseParameter(symbol);
+        open = new OpenParameter(symbol, interval);
+        close = new CloseParameter(symbol, interval);
     }
 
     @Override
     public Key getQueryKey() {
-        return Key.from("Top", symbol, "day");
+        return Key.from("Top", symbol, interval.getKey());
     }
 
     @Override

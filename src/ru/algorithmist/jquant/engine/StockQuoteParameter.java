@@ -19,6 +19,7 @@
 package ru.algorithmist.jquant.engine;
 
 import ru.algorithmist.jquant.connectors.ConnectorProcess;
+import ru.algorithmist.jquant.storage.Key;
 
 import java.util.Date;
 
@@ -31,10 +32,12 @@ public abstract class StockQuoteParameter implements IParameter {
     protected String symbol;
     protected String name;
     private SimpleUpdater updater;
+    protected TimeInterval interval;
 
-    public StockQuoteParameter(String name, String symbol) {
+    public StockQuoteParameter(String name, String symbol, TimeInterval interval) {
         this.symbol = symbol;
         this.name = name;
+        this.interval = interval;
         updater = new SimpleUpdater(name, symbol);
     }
 
@@ -69,6 +72,11 @@ public abstract class StockQuoteParameter implements IParameter {
     @Override
     public boolean saveable() {
         return true;
+    }
+
+        @Override
+    public Key getQueryKey() {
+        return Key.from(name, symbol, interval.getKey());
     }
 
     private static class SimpleUpdater implements IUpdater{

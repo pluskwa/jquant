@@ -20,6 +20,7 @@ package ru.algorithmist.jquant.indicators;
 
 import ru.algorithmist.jquant.engine.DataService;
 import ru.algorithmist.jquant.engine.IParameter;
+import ru.algorithmist.jquant.engine.TimeInterval;
 import ru.algorithmist.jquant.quotes.CloseParameter;
 import ru.algorithmist.jquant.quotes.OpenParameter;
 import ru.algorithmist.jquant.storage.Key;
@@ -35,17 +36,18 @@ public class MedianParameter extends CalculatedParameter {
     private String symbol;
     private IParameter open;
     private IParameter close;
+    private TimeInterval interval;
 
 
-    public MedianParameter(String symbol) {
+    public MedianParameter(String symbol, TimeInterval interval) {
         this.symbol = symbol;
-        open = new OpenParameter(symbol);
-        close = new CloseParameter(symbol);
+        open = new OpenParameter(symbol, interval);
+        close = new CloseParameter(symbol, interval);
     }
 
     @Override
     public Key getQueryKey() {
-        return Key.from("Median", symbol, "day");
+        return Key.from("Median", symbol, interval.getKey());
     }
 
     @Override

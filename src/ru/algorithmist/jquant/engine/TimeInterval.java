@@ -16,21 +16,38 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with JQuant. If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.algorithmist.jquant.quotes;
-
-import ru.algorithmist.jquant.engine.StockQuoteParameter;
-import ru.algorithmist.jquant.engine.TimeInterval;
-import ru.algorithmist.jquant.storage.Key;
+package ru.algorithmist.jquant.engine;
 
 /**
- * @author "Sergey Edunov"
- * @version 12/29/10
+ * User: Sergey Edunov
+ * Date: 29.12.10
  */
-public class HighParameter extends StockQuoteParameter {
+public enum TimeInterval {
 
-    public HighParameter(String symbol, TimeInterval interval) {
-        super("High", symbol, interval);
+//    TICK("tick"),
+//    MIN("min"),
+//    MIN10("10min"),
+//    MIN5("5min"),
+//    MIN15("15min"),
+//    MIN30("30min"),
+//    HOUR("hour"),
+    DAY("day", 86400000);
+//    WEEK("week"),
+//    MONTH("month");
+
+    private String key;
+    private long timeSpan;
+
+    TimeInterval(String key, long timeSpan){
+        this.key = key;
+        this.timeSpan = timeSpan;
     }
 
+    public String getKey() {
+        return key;
+    }
 
+    public long getTimeSpan() {
+        return timeSpan;
+    }
 }

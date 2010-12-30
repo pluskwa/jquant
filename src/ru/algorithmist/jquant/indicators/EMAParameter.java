@@ -76,7 +76,8 @@ public class EMAParameter extends CalculatedParameter {
 
     @Override
     public Key getQueryKey() {
-        return Key.from("EMA", String.valueOf(span));
+        return Key.from("EMA", String.valueOf(span))
+                .addKey(base.getQueryKey());
     }
 
     @Override

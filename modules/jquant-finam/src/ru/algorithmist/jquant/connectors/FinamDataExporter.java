@@ -20,6 +20,7 @@ package ru.algorithmist.jquant.connectors;
 
 
 
+import ru.algorithmist.jquant.engine.TimeInterval;
 import ru.algorithmist.jquant.infr.HTTPClientFactory;
 import ru.algorithmist.jquant.infr.IHTTPClient;
 
@@ -82,6 +83,7 @@ public class FinamDataExporter {
             if (items.length>8) {
                 callback.setVolume(Long.parseLong(items[8].trim()));
             }
+            callback.setTimeInterval(TimeInterval.DAY);
             callback.commit();
         }catch(Exception e){
             throw new RuntimeException(e);

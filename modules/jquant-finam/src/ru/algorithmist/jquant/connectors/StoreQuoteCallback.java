@@ -20,6 +20,7 @@ package ru.algorithmist.jquant.connectors;
 
 import ru.algorithmist.jquant.engine.DataService;
 import ru.algorithmist.jquant.engine.IParameter;
+import ru.algorithmist.jquant.engine.TimeInterval;
 import ru.algorithmist.jquant.quotes.CloseParameter;
 import ru.algorithmist.jquant.quotes.HighParameter;
 import ru.algorithmist.jquant.quotes.LowParameter;
@@ -42,6 +43,7 @@ public class StoreQuoteCallback implements QuoteCallback {
     private double low;
     private double volume;
     private Date date;
+    private TimeInterval interval;
 
 
     public StoreQuoteCallback(String symbol) {
@@ -79,12 +81,17 @@ public class StoreQuoteCallback implements QuoteCallback {
     }
 
     @Override
+    public void setTimeInterval(TimeInterval interval) {
+        this.interval = interval;
+    }
+
+    @Override
     public void commit() {
-        store(new CloseParameter(symbol), close);
-        store(new OpenParameter(symbol), open);
-        store(new HighParameter(symbol), high);
-        store(new LowParameter(symbol), low);
-        store(new VolumeParameter(symbol), volume);
+        store(new CloseParameter(symbol, interval), close);
+        store(new OpenParameter(symbol, interval), open);
+        store(new HighParameter(symbol, interval), high);
+        store(new LowParameter(symbol, interval), low);
+        store(new VolumeParameter(symbol, interval), volume);
     }
 
     public void store(IParameter parameter, double  value){

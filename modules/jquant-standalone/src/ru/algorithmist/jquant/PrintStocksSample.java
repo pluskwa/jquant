@@ -2,6 +2,7 @@ package ru.algorithmist.jquant;
 
 import ru.algorithmist.jquant.engine.DataService;
 import ru.algorithmist.jquant.engine.IParameter;
+import ru.algorithmist.jquant.engine.TimeInterval;
 import ru.algorithmist.jquant.indicators.EMAParameter;
 import ru.algorithmist.jquant.quotes.CloseParameter;
 
@@ -16,7 +17,7 @@ public class PrintStocksSample {
     public static void main(String[] args) {
         Initializer.initialize();
         Date date = new Date(110, 11, 28);
-        IParameter close = new CloseParameter("SBER");
+        IParameter close = new CloseParameter("SBER", TimeInterval.DAY);
         System.out.println(DataService.instance().value(date, close));
         IParameter ema = new EMAParameter(close, 10);
         System.out.println(DataService.instance().value(date, ema));

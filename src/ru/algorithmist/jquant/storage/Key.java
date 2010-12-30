@@ -32,6 +32,14 @@ public class Key {
         return new Key(args);
     }
 
+    public Key addKey(Key other){
+        String[] newdata = new String[data.length + other.data.length];
+        System.arraycopy(data, 0, newdata, 0, data.length);
+        System.arraycopy(other.data, 0, newdata, data.length, other.data.length);
+        data = newdata;
+        return this;
+    }
+
     public Key(String[] data) {
         this.data = data;
     }

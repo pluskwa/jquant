@@ -18,6 +18,8 @@
  */
 package ru.algorithmist.jquant.connectors;
 
+import ru.algorithmist.jquant.engine.TimeInterval;
+
 import java.util.Date;
 
 /**
@@ -37,6 +39,8 @@ public interface QuoteCallback {
     public void setVolume(long value);
 
     public void setDate(Date date);
+
+    public void setTimeInterval(TimeInterval interval);
 
     public void commit();
 
