@@ -20,6 +20,9 @@ package ru.algorithmist.jquant;
 
 import ru.algorithmist.jquant.connectors.ConnectorProcess;
 import ru.algorithmist.jquant.connectors.FinamDayTradesConnector;
+import ru.algorithmist.jquant.storage.ExportImport;
+
+import java.io.*;
 
 /**
  * @author "Sergey Edunov"
@@ -27,10 +30,44 @@ import ru.algorithmist.jquant.connectors.FinamDayTradesConnector;
  */
 public class Initializer {
 
-    public static void initialize(){
+    private static File f = new File("resources/init.txt");
+
+    public static void initialize() {
         FinamDayTradesConnector connector = new FinamDayTradesConnector();
         ConnectorProcess cp = ConnectorProcess.getInstance();
         cp.register(connector);
+
+        ExportImport ei = new ExportImport();
+
+        InputStream is = null;
+        try {
+            is = new FileInputStream(f);
+            ei.importData(is);
+        } catch (FileNotFoundException e) {
+
+        } finally {
+            try {
+                if (is!=null) is.close();
+            } catch (IOException e) {}
+        }
+
+    }
+
+    public static void dispose() throws IOException {
+        if (!f.exists()) {
+            f.createNewFile();
+        }
+        ExportImport ei = new ExportImport();
+        OutputStream os = null;
+        try{
+            os = new FileOutputStream(f);
+            ei.exportData(os);
+        }finally {
+            if (os!=null) {
+                os.close();
+            }
+        }
+
     }
 
 }

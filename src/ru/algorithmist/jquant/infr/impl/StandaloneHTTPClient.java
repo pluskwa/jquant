@@ -47,7 +47,6 @@ public class StandaloneHTTPClient implements IHTTPClient{
         client.getParams()
                 .setParameter("User-Agent",
                         "Mozilla/5.0 (X11; Linux x86_64; rv:2.0.1) Gecko/20100101 Firefox/4.0.1");
-        setProxy("surfproxy.de.db.com", 8080);
     }
 
     public void setProxy(String host, int port) {

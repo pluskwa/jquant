@@ -30,7 +30,7 @@ import java.util.GregorianCalendar;
  */
 public class DateUtils {
 
-    public static boolean isTheSameSay(Date a, Date b) {
+    public static boolean isTheSameDay(Date a, Date b) {
         return a.getDate() == b.getDate() && a.getYear() == b.getYear() && a.getMonth() == b.getMonth();
     }
 
@@ -39,8 +39,10 @@ public class DateUtils {
     }
 
     public static Date shift(Date from, TimeInterval interval, int shift){
-        long ms = from.getTime() + shift*interval.getTimeSpan();
-        return new Date(ms);
+        if (interval == TimeInterval.DAY){
+            return shiftDays(from, shift);
+        }
+        throw new RuntimeException("Not implemented");
     }
 
     public static Date monthBefore(Date today){
@@ -68,9 +70,19 @@ public class DateUtils {
         return from;
     }
 
+    public static Date shiftDays(Date date, int days){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DAY_OF_MONTH, days);
+        return cal.getTime();
+    }
+
     public static Date yesterday(Date today){
-        long time = today.getTime() - 24*60*60*1000;
-        return new Date(time);
+        return shiftDays(today, -1);
+    }
+
+    public static Date tomorrow(Date today){
+        return shiftDays(today, 1);
     }
 
 

@@ -101,7 +101,7 @@ public class FinamDataExporter {
 
     private static void fillTheGap(Date prev, Date date, QuoteCallback callback) {
         Date yesterday = DateUtils.yesterday(date);
-        while (!DateUtils.isTheSameSay(prev, yesterday)){
+        while (!DateUtils.isTheSameDay(prev, yesterday)){
             callback.setDate(yesterday);
             callback.setClose(Double.NaN);
             callback.setOpen(Double.NaN);

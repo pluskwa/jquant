@@ -20,15 +20,9 @@
 
 package ru.algorithmist.jquant.connectors;
 
-import ru.algorithmist.jquant.engine.DataService;
-import ru.algorithmist.jquant.engine.IParameter;
 import ru.algorithmist.jquant.infr.DateUtils;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,7 +62,7 @@ public class FinamDayTradesConnector implements IConnector{
             return false;
         }
         Date today = new Date();
-        if (DateUtils.isTheSameSay(date, today)){
+        if (DateUtils.isTheSameDay(date, today)){
             if (today.getHours() < 20) return false;
         }
         if (DateUtils.isDateAfterDay(today, date)){
