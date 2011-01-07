@@ -21,6 +21,7 @@ package ru.algorithmist.jquant.indicators;
 import ru.algorithmist.jquant.engine.IParameter;
 import ru.algorithmist.jquant.engine.TimeInterval;
 import ru.algorithmist.jquant.engine.Value;
+import ru.algorithmist.jquant.engine.DataService;
 import ru.algorithmist.jquant.storage.Key;
 
 import java.util.Date;
@@ -31,31 +32,56 @@ import java.util.Date;
  */
 public class RSIParameter extends CalculatedParameter  {
 
-    public RSIParameter(int days) {
+    private String symbol;
+    private int span;
+    private TimeInterval interval;
+    private IParameter averageGain;
+    private IParameter averageLoss;
+
+    public RSIParameter(String symbol, int span, TimeInterval interval) {
+        this.symbol = symbol;
+        this.span = span;
+        this.interval = interval;
+        averageGain = new EMAParameter(new GainParameter(symbol, interval), span);
+        averageLoss = new EMAParameter(new LossParameter(symbol, interval), span);
     }
 
     @Override
     public IParameter[] declareDependencies() {
-        return new IParameter[0];  //To change body of implemented methods use File | Settings | File Templates.
+        return new IParameter[]{averageGain, averageLoss};
     }
 
     @Override
     public Value calculate(Date date) {
-        return Value.TNA;  //To change body of implemented methods use File | Settings | File Templates.
+        Value gain = DataService.instance().value(date, averageGain);
+        Value loss = DataService.instance().value(date, averageLoss);
+        if (gain.isOK() && loss.isOK()){
+            if (Math.abs(loss.getValue()) < 1e-6){
+                return new Value(100);
+            }
+            double rs = gain.getValue()/loss.getValue();
+            double rsi = 100 - 100 / (1. + rs);
+            return new Value(rsi);
+        }
+        if (gain.isNA() || loss.isNA()){
+            return Value.NA;
+        }
+        return Value.TNA;
+
     }
 
     @Override
     public Key getQueryKey() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return Key.from("RSI", String.valueOf(span), symbol, interval.getKey());
     }
 
     @Override
     public boolean saveable() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return true;
     }
 
     @Override
     public TimeInterval getTimeInterval() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return interval;
     }
 }
