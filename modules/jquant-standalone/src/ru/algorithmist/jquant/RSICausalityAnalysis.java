@@ -38,14 +38,14 @@ import java.io.IOException;
 public class RSICausalityAnalysis {
 
     static Date to = new Date(110, 11, 28);
-    static Date from = new Date(108, 11, 28);
+    static Date from = new Date(102, 11, 28);
 
     public static void main(String[] args) throws IOException {
         Initializer.initialize();
 
         String symbol = "MICEX";
         TimeInterval interval = TimeInterval.DAY;
-        RSISignal signal = new RSISignal(symbol, 7, interval);
+        RSISignal signal = new RSISignal(symbol, 14, interval);
 
 
         SignalProcessor processor = SignalProcessor.instance();

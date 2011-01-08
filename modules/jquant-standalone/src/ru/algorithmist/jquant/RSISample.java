@@ -23,13 +23,15 @@ public class RSISample {
     public static void main(String[] args) throws IOException {
         Initializer.initialize();
         Date date = new Date(110, 11, 28);
-        IParameter rsi = new RSIParameter("MICEX", 7, TimeInterval.DAY);
+        IParameter rsi = new RSIParameter("MICEX", 14, TimeInterval.DAY);
+        IParameter ema = new EMAParameter(new CloseParameter("MICEX", TimeInterval.DAY), 7);
 //        IParameter rsi = new EMAParameter(new CloseParameter("SBER", TimeInterval.DAY), 7);
         for(int i=100; i>=0; i--){
             Date d = DateUtils.shift(date, TimeInterval.DAY, -i);
             Value v = DataService.instance().value(d, rsi);
+            Value v1 = DataService.instance().value(d, ema);
             if (v.isOK()){
-                System.out.println(d + " " + v.getValue());
+                System.out.println(d + " " + v.getValue() + " " + v1.getValue());
             }
         }
 

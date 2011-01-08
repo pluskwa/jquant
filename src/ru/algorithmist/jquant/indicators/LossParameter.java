@@ -59,8 +59,12 @@ public class LossParameter extends CalculatedParameter {
 
     @Override
     public Value calculate(Date date) {
-        Value v1 = DataService.instance().value(date, close, -1);
+        int shift = -1;
+        Value v1 = DataService.instance().value(date, close, shift);
         Value v2 = DataService.instance().value(date, close);
+        while(v2.isOK() && v1.isNA() && shift > -30){
+            v1 = DataService.instance().value(date, close, --shift);
+        }
         if (v1.isOK() && v2.isOK()){
             double delta = v1.getValue() - v2.getValue();
             if (delta > 0){
