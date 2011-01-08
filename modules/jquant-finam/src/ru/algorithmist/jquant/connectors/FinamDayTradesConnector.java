@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Sergey Edunov. All Rights Reserved.
+ * Copyright (c) 2011, Sergey Edunov. All Rights Reserved.
  *
  * This file is part of JQuant library.
  *
@@ -43,8 +43,12 @@ public class FinamDayTradesConnector implements IConnector{
 
     @Override
     public void load(String name, String symbol, Date date) {
-        Date from = DateUtils.month2Before(date);
+        System.out.println("Query for " + symbol + " for " + date);
         Date to = new Date();
+        if (date.after(to)){
+            throw new IllegalArgumentException("Date is not available " + date);
+        }
+        Date from = DateUtils.month2Before(date);
         if (to.getHours() < 20){
             to = DateUtils.yesterday(to);
         }

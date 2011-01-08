@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Sergey Edunov. All Rights Reserved.
+ * Copyright (c) 2011, Sergey Edunov. All Rights Reserved.
  *
  * This file is part of JQuant library.
  *
@@ -85,7 +85,7 @@ public abstract class CalculatedParameter implements IParameter, ICalculator {
         @Override
         public Value update(Date date) {
             Value value = parameter.calculate(date);
-            if (parameter.saveable()) {
+            if (parameter.saveable() && !value.isTNA()) {
                 DataService.instance().update(date, parameter, value);
             }
             return value;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Sergey Edunov. All Rights Reserved.
+ * Copyright (c) 2011, Sergey Edunov. All Rights Reserved.
  *
  * This file is part of JQuant library.
  *
@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
 public class ExportImport {
 
     private static final Pattern TAB = Pattern.compile("\t");
-    private DateFormat DF = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
+    private DateFormat DF = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.US);
 
 
     public void exportData(OutputStream os) {

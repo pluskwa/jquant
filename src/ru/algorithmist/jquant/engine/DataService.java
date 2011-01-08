@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Sergey Edunov. All Rights Reserved.
+ * Copyright (c) 2011, Sergey Edunov. All Rights Reserved.
  *
  * This file is part of JQuant library.
  *
@@ -39,18 +39,29 @@ public class DataService {
     }
 
     public Value value(Date date, IParameter parameter){
-        return  value(date, parameter, 0);
-    }
-
-    public Value value(Date date, IParameter parameter, int shift){
-        date = DateUtils.shift(date, parameter.getTimeInterval(), shift);
         Value value = storage.query(parameter.getQueryKey(), date);
-        if (value.isNA() || value.isOK()){
+         if (value.isNA() || value.isOK()){
             return value;
         }
         value = parameter.getUpdater().update(date);
         if (value.isTNA()) {
             value = storage.query(parameter.getQueryKey(), date);
+        }
+        return value;
+    }
+
+    public Value value(Date date, IParameter parameter, int shift){
+        Value value = value(date, parameter);
+        int sign = (int) Math.signum(shift);
+        shift = sign*shift;
+        while(shift>0) {
+            date = DateUtils.shift(date, parameter.getTimeInterval(), sign);
+            value = value(date, parameter);
+            if (value.isOK()){
+                shift--;
+            }else if (value.isTNA()){
+                return Value.TNA;
+            }
         }
         return value;
     }
