@@ -58,6 +58,7 @@ public class YahooDataExporter {
 
     private static void parse(String[] lines, QuoteCallback callback) throws ParseException {
         Date prev = null;
+        if (lines[1]!=null && lines[1].contains("Yahoo! - 404 Not Found")) return;
         for(int i=1; i<lines.length; i++){
             String line = lines[i];
             prev = parse(prev, line, callback);
