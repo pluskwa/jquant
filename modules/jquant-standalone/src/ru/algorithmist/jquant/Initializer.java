@@ -20,6 +20,7 @@ package ru.algorithmist.jquant;
 
 import ru.algorithmist.jquant.connectors.ConnectorProcess;
 import ru.algorithmist.jquant.connectors.FinamDayTradesConnector;
+import ru.algorithmist.jquant.connectors.YahooDayTradesConnector;
 import ru.algorithmist.jquant.storage.ExportImport;
 
 import java.io.*;
@@ -36,6 +37,9 @@ public class Initializer {
         FinamDayTradesConnector connector = new FinamDayTradesConnector();
         ConnectorProcess cp = ConnectorProcess.getInstance();
         cp.register(connector);
+
+        YahooDayTradesConnector yahooConnector = new YahooDayTradesConnector();
+        cp.register(yahooConnector);
 
         ExportImport ei = new ExportImport();
 

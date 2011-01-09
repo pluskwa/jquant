@@ -59,6 +59,7 @@ public class StandaloneHTTPClient implements IHTTPClient{
     }
 
     public String getContent(String url) throws IOException {
+        System.out.println(url);
         long timeSinceLastQuery = System.currentTimeMillis() - lastQueryTime;
         if (timeSinceLastQuery < 1000) {
             try {

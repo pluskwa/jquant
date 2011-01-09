@@ -20,7 +20,7 @@ public class PrintStocksSample {
     public static void main(String[] args) throws IOException {
         Initializer.initialize();
         Date date = new Date(110, 11, 28);
-        IParameter close = new CloseParameter("SBER", TimeInterval.DAY);
+        IParameter close = new CloseParameter("GOOG", TimeInterval.DAY);
         System.out.println(DataService.instance().value(date, close));
         IParameter ema = new EMAParameter(close, 10);
         System.out.println(DataService.instance().value(date, ema));
